@@ -5,7 +5,7 @@ namespace FactionPlugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as Color;
 
-class FactionPlugin extends PluginBase {
+class Core extends PluginBase {
 
 	public function onEnable()
 	{
