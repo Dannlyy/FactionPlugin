@@ -6,15 +6,24 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as Color;
 
 class Core extends PluginBase {
+	
+	private static $instance;
+	private static $faction;
 
 	public function onEnable()
 	{
-		$this->getLogger()->info(Color::DARK_GREEN . " enabled !");
+		$this->getLogger()->info(Color::GRAY . " The plugin has been enabled succesfully.");
+		
+		self::$instance = $this;
 	}
-
-	public function onDisable()
+	
+	/*
+	 * This function return the instance of this file (Core)
+	 */
+	
+	public static function getInstance()
 	{
-		$this->getLogger()->info(Color::DARK_RED . " disabled !");
+		return self::$instance;
 	}
 
 }
