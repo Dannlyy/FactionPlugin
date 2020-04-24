@@ -1,2 +1,2 @@
 # FactionPlugin
-Ceci est le plugin Faction d'Indiana
+Plugin full customisable fait par @russ14n-fs0c13ty et @BloodyMC
