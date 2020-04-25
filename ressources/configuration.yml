@@ -1,1 +1,19 @@
+factions: 
+  max_members: 7
+  max_allies: 2
+  default_level: 1
 
+claims_features:
+  
+  level_one:
+    abilities:
+      unbreakable_block: true
+
+  level_two:
+    abilities:
+      uninteractable: true
+  
+  level_three:
+    abilities:
+      slowness: true
+    
