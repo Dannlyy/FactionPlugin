@@ -14,26 +14,22 @@ class FPlayer extends Player {
 	}
 
 	/* Faction Methods */
-	public function getFaction()
+	public function getFaction() : mixed
 	{
 		return $this->players_factions->get($this->getName())["Faction"];
 	}
 
-	public function setFaction(mixed $name = null) : string
+	public function setFaction(mixed $name = null, mixed $rank = null)
 	{
-		$this->players_factions->set($this->getName()["Faction"], $name);
+		$this->players_factions->set($this->getName(), [
+			"Faction" => $name,
+			"Rank" => $rank
+		]);
 	}
 
 	public function getFactionRank()
 	{
-		$faction = $this->getFaction();
-
-		foreach($this->factions->get($faction) as $informations => $array)
-		{
-			if(in_array($this->getName(), $array))
-				return $informations;
-				break;
-		}
+		return $this->players_factions->get($this->getName()["Rank"]);
 	}
 
 }

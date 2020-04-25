@@ -79,7 +79,7 @@ class FactionCommand extends PluginCommand {
                      * If the faction name is valid and doesn't already exist
                      */
 
-                    $sender->setFaction($name);
+                    $sender->setFaction($name, "Leader");
                     $fmethods->createFaction($name);
 
                     $sender->sendMessage(
