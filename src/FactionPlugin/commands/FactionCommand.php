@@ -13,4 +13,12 @@ class FactionCommand extends PluginCommand
         parent::__construct("f", $plugin);
         $this->setDescription("Cette commande permet d'avoir accés au commandes de Faction.");
     }
+
+    public function execute(CommandSender $sender, string $commandLabel, array $args)
+    {
+    	if(sizeof($args) === 0)
+    	{
+    		$sender->sendMessage("");
+    	}
+    }
 }

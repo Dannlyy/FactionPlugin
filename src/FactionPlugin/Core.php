@@ -12,8 +12,13 @@ class Core extends PluginBase {
 
 	public function onEnable()
 	{
-		$this->getLogger()->info(Color::GRAY . " The plugin has been enabled succesfully.");
+		$this->getLogger()->info(Color::DARK_GREEN . " The plugin has been enabled succesfully.");
 		self::$instance = $this;
+	}
+
+	public function onDisable()
+	{
+		$this->getLogger()->info(Color::DARK_RED . " The plugin has been disabled succesfully.");
 	}
 	
 	/*
