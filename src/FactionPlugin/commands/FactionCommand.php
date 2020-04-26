@@ -129,6 +129,12 @@ class FactionCommand extends PluginCommand
                     return true;
                 }
 
+                $fmethods->sendMessageToFaction($name, str_replace(
+                    "[NAME]",
+                    $name,
+                    $lang["ALERT_DELETED_SUCCESS"]
+                ));
+
                 $fmethods->removeFaction($name);
                 $sender->sendMessage(
                     str_replace(

@@ -13,8 +13,8 @@ class BaseLang {
 	public static function translate()
 	{
 		return [
-			"FACTION_HELP" => 
-				"§6--} Faction help" . Color::EOL .
+            "FACTION_HELP" =>
+                "§6--} Faction help" . Color::EOL .
                 "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
                 "§6/f delete §r-> §6Delete your own faction",
 
@@ -22,7 +22,7 @@ class BaseLang {
             "ALERT_CREATED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§2created§r§6 the faction §r§4[NAME]",
 
             "DELETED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§4deleted",
-            "ALERT_DELETED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§4deleted§r§6 the faction §r§4[NAME]",
+            "ALERT_DELETED_SUCCESS" => "§6--} §r§6Your faction §4[NAME] §6has been §r§4deleted§r§6 successfully",
 
             "ERROR" => "§6--} §r§4An error occured, please try again",
             "INVALID_PERM" => "§6--} §r§4You don't have the right permission for do that",

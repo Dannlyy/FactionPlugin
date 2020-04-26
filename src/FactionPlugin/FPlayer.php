@@ -2,7 +2,9 @@
 
 namespace FactionPlugin;
 
+use pocketmine\network\SourceInterface;
 use pocketmine\Player;
+use pocketmine\utils\Config;
 
 class FPlayer extends Player
 {
@@ -12,7 +14,7 @@ class FPlayer extends Player
     public function __construct(SourceInterface $interface, string $ip, int $port)
     {
         parent::__construct($interface, $ip, $port);
-        $this->file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::YAML);
+        $this->file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::JSON);
     }
 
     /*

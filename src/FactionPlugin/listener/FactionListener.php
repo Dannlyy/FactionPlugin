@@ -3,19 +3,15 @@
 namespace FactionPlugin\listener;
 
 use FactionPlugin\FPlayer;
-use pocketmine\Listener;
-use pocketmine\event\player\{
-	PlayerJoinEvent,
-	PlayerQuitEvent,
-	PlayerInteractEvent,
-	PlayerCreationEvent
-};
+use pocketmine\event\Listener;
+use pocketmine\event\player\{PlayerCreationEvent};
 
-class FactionListener implements Listener {
+class FactionListener implements Listener
+{
 
-	public function creation(PlayerCreationEvent $event)
-	{
-		$event->getPlayer()->setPlayerClass(FPlayer::class);
-	}
+    public function creation(PlayerCreationEvent $event)
+    {
+        $event->setPlayerClass(FPlayer::class);
+    }
 
 }
