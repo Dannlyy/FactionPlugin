@@ -1,5 +1,6 @@
-factions: 
-  max_members: 7
+factions:
+
+  max_members: 8
   max_allies: 2
   default_level: 1
 
@@ -12,8 +13,17 @@ claims_features:
   level_two:
     abilities:
       uninteractable: true
-  
+
   level_three:
     abilities:
       slowness: true
-    
+
+homes:
+
+  status: true
+
+  level_one:
+    number: 1
+
+  level_two:
+    number: 2

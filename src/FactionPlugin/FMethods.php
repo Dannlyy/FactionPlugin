@@ -2,83 +2,122 @@
 
 namespace FactionPlugin;
 
-class FMethods {
+use pocketmine\utils\Config;
 
-	private $factions; #Data file
-	private $players_factions; #Data file
+class FMethods
+{
 
-	public function __construct()
-	{
-        $this->players_factions = new Config($this->getDataFolder() . "players_factions.yml", Config::YAML);
-        $this->factions = new Config($this->getDataFolder() . "factions.yml", Config::YAML);
-	}
+    private $factions; #Data file
+    private $players_factions; #Data file
 
-	public function existFaction(string $name) : bool
-	{
-		if(in_array($name, $this->factions->getAll()))
-			return true
-		else
-			return false
-	}
+    public function getFile($configName)
+    {
+        return new Config(Core::getInstance()->getDataFolder() . $configName . ".json", Config::JSON);
+    }
 
-	public function createFaction(string $name)
-	{
-		$form = [
-            "Home" => "", #Coords of the faction home (middle coords X/Z)
-            "Date of creation" => [
-                "Day" => date("d"), #Day
-                "Month" => date("m"), #Month
-                "Year" => date("Y"), #Year
+    /*
+     * This function let you see if the Faction selected exists or not.
+     */
 
-                "Second" => date("s"), #Second
-                "Minute" => date("i"), #Minute
-                "Hour" => date("g A"), #Hour (12 Hours Format)
-            ],
+    public function existFaction($name)
+    {
 
-            "Leader" => $this->getName(), #Name of the leader
-            "Captains" => [], #Array of Captains
+        if (file_exists(Core::getInstance()->getDataFolder() . $name . ".json")) return true;
+        return false;
+    }
+
+    /*
+     * This function let you create a faction.
+     */
+
+    public function createFaction(Player $player, $name)
+    {
+        $file = $this->getFile($name); # We create for each Faction a file.
+        $second_file = $this->getFile("players_factions"); # It's the second file where we save the name of faction and rank.
+
+        $form = [
+            "Home" => [], #Coords of the faction home (middle coords X/Z)
+            "Date" => date("Y") . date("m") . date("d"), #Format Year . Month . Day
+
+            "Leader" => $player->getName(), #Name of the leader
+            "Officers" => [], #Array of Captains
             "Members" => [], #Array of Members
             "Allies" => [], #Array of all allies
 
             "Power" => "0", #Faction Power
             "Balance" => "0", #Faction balance
-            "Kills" => "0" #Number of kill (all members summered)
+            "Kills" => "0", #Number of kill (all members summered)
+
+            "Claims" => []
         ];
 
-        $this->factions->set($name, $form);
-	}
+        $file->set($name, $form); # Here i save the informations of the faction.
+        $file->save();
 
-	public function removeFaction(string $name)
-	{
-		foreach($this->factions->get($name) as $informations => $value)
-        {
-            if($informations === "Members")
-            {
-                foreach($informations as $member)
-                {
-                    $this->player_form->set($member["Faction"], null);
-                }
-            }
+        $second_file->set($player->getName(), $name . " Leader"); # Here i save the second file informations.
+        $second_file->save();
 
-            if($informations === "Captains")
-            {
-                foreach($informations as $captain)
-                {
-                    $this->player_form->set($captain["Faction"], null);
-                }
-            }
+    }
 
-            if($informations === "Allies")
-            {
-                foreach($informations as $ally)
-                {
-                	$allies = $this->factions->get($ally["Allies"]);
-                    unset($allies[$name]);
-                }
-            }
+    /*
+     * This function let you delete a faction.
+     */
 
+    public function removeFaction($name)
+    {
+
+        $file = $this->getFile("players_factions");
+        $faction = Core::getInstance()->getDataFolder() . $name . ".json"; # This is the faction file.
+
+        $file->remove(implode("", array_keys($file->getAll(), $name))); # Here i search all keys with the same value to delete all keys.
+        @unlink($faction); # Here i delete the faction file.
+
+        $file->save();
+
+    }
+
+    /*
+     * This function let you see the faction of a Player.
+     */
+
+    public function hasFaction($playerName)
+    {
+
+        $file = $this->getFile("players_factions");
+        if ($file->exists($this->getName())) {
+            return true;
         }
-        $this->factions->remove($name);        
-	}
+
+        return false;
+    }
+
+    public function getPlayerFaction($playerName)
+    {
+        $file = $this->getFile("players_factions");
+
+        if ($this->hasFaction($playerName)) {
+            $search = explode(" ", $file->get($playerName));
+            return $search[0];
+        }
+
+        return null;
+    }
+
+    public function getFactionRank($playerName)
+    {
+        $file = $this->getFile("players_factions");
+        $search = explode(" ", $file->get($playerName));
+
+        if ($search[0] === "Leader") {
+            return "**";
+        }
+
+        if ($search[0] === "Officer") {
+            return "*";
+        }
+
+        return "";
+
+    }
 
 }

@@ -3,8 +3,8 @@
 namespace FactionPlugin;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\utils\TextFormat as Color;
 use pocketmine\utils\Config;
+use pocketmine\utils\TextFormat as Color;
 
 class Core extends PluginBase {
 	
@@ -15,12 +15,10 @@ class Core extends PluginBase {
 		$this->getLogger()->info(Color::DARK_GREEN . " The plugin has been enabled succesfully.");
 		self::$instance = $this;
 
-		if(!$this->getDataFolder())
-		{
-			@mkdir($this->getDataFolder());
-			$factions = new Config($this->getDataFolder() . "factions.yml", Config::YAML);
-			$players = new Config($this->getDataFolder() . "players_factions.yml", Config::YAML);
-		}
+		if(!$this->getDataFolder()) {
+            @mkdir($this->getDataFolder());
+            $create_file = new Config($this->getDataFolder() . "players_factions.json", Config::YAML);
+        }
 	}
 
 	public function onDisable()

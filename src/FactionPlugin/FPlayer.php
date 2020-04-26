@@ -4,32 +4,52 @@ namespace FactionPlugin;
 
 use pocketmine\Player;
 
-class FPlayer extends Player {
-	
-	public function __construct(SourceInterface $interface, string $ip, int $port)
+class FPlayer extends Player
+{
+
+    private $file;
+
+    public function __construct(SourceInterface $interface, string $ip, int $port)
     {
         parent::__construct($interface, $ip, $port);
-        $this->players_factions = new Config($this->getDataFolder() . "players_factions.yml", Config::YAML);
-        $this->factions = new Config($this->getDataFolder() . "factions.yml", Config::YAML);
-	}
+        $this->file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::YAML);
+    }
 
-	/* Faction Methods */
-	public function getFaction() : mixed
-	{
-		return $this->players_factions->get($this->getName())["Faction"];
-	}
+    /*
+     * This function let you see the player faction.
+     */
 
-	public function setFaction(mixed $name = null, mixed $rank = null)
-	{
-		$this->players_factions->set($this->getName(), [
-			"Faction" => $name,
-			"Rank" => $rank
-		]);
-	}
+    public function getFaction()
+    {
 
-	public function getFactionRank()
-	{
-		return $this->players_factions->get($this->getName()["Rank"]);
-	}
+        $search = explode(" ", $this->file->get($this->getName()));
+        return $search[0];
+
+    }
+
+    /*
+     * This function let you see the player faction rank.
+     */
+
+    public function getFactionRank()
+    {
+
+        $search = explode(" ", $this->file->get($this->getName()));
+        return $search[1];
+
+    }
+
+    /*
+     * This function let you see if a player has a faction.
+     */
+
+    public function hasFaction()
+    {
+        if ($this->file->exists($this->getName())) {
+            return true;
+        }
+
+        return false;
+    }
 
 }
