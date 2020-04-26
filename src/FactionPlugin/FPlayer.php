@@ -10,11 +10,13 @@ class FPlayer extends Player
 {
 
     private $file;
+    private $chat_array;
 
     public function __construct(SourceInterface $interface, string $ip, int $port)
     {
         parent::__construct($interface, $ip, $port);
         $this->file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::JSON);
+        $this->chat_array = [];
     }
 
     /*

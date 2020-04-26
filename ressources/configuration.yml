@@ -17,13 +17,3 @@ claims_features:
   level_three:
     abilities:
       slowness: true
-
-homes:
-
-  status: true
-
-  level_one:
-    number: 1
-
-  level_two:
-    number: 2

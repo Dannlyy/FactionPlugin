@@ -22,7 +22,7 @@ class FactionCommand extends PluginCommand
     public function __construct(Core $plugin)
     {
         parent::__construct("f", $plugin);
-        $this->setDescription("Cette commande permet d'avoir accés au commandes de Faction.");
+        $this->setDescription("Access to the faction's commands");
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
@@ -55,7 +55,7 @@ class FactionCommand extends PluginCommand
                  * If we have a name and args[1] (name) is alphanumeric
                  */
 
-                if (!empty($args[1]) && ctype_alnum($args[1])) {
+                if (!empty($args[1]) && ctype_alnum($args[1]) && strlen($args[1]) =< 12) {
                     $name = $args[1];
 
                     if ($sender->hasFaction()) {
@@ -129,13 +129,12 @@ class FactionCommand extends PluginCommand
                     return true;
                 }
 
-                $fmethods->sendMessageToFaction($name, str_replace(
-                    "[NAME]",
-                    $name,
-                    $lang["ALERT_DELETED_SUCCESS"]
-                ));
+                /*
+                 * If the sender have a faction and he is the leader
+                */
 
                 $fmethods->removeFaction($name);
+
                 $sender->sendMessage(
                     str_replace(
                         "[NAME]",
@@ -144,7 +143,158 @@ class FactionCommand extends PluginCommand
                     )
                 );
 
+                Server::getInstance()->broadcastMessage(
+                    str_replace(
+                        ["[PLAYER]", "[NAME]"],
+                        [$sender->getName(), $name],
+                        $lang["ALERT_CREATED_SUCCESS"]
+                    )
+                );
+
             }
+
+            /*
+             * This statement allow a player to create a faction
+             */
+
+            if ($args[0] === "info") {
+
+                if (empty($args[1])) {
+
+                    /*
+                     * The faction name does not exist
+                     */
+
+                    if (!$fmethods->existFaction($name)) {
+                        $sender->sendMessage($lang["INVALID_FAC_NAME"]);
+                        return true;
+                    }
+
+                    $name = $args[1];
+                    $informations = $sender->getFactionInformations($name);
+                    $sender->sendMessage(
+                        str_replace(
+                            [
+                                "[NAME]", 
+                                "[LEVEL]", 
+                                "[HOME]", 
+                                "[CLAIMS]", 
+                                "[POWER]", 
+                                "[BALANCE]", 
+                                "[KILLS]", 
+                                "[DATE]", 
+                                "[LEADER]", 
+                                "[CAPTAINS]", 
+                                "[MEMBERS]", 
+                                "[ALLIES]"
+                            ], 
+                            [
+                                $name,
+                                $informations["Level"], 
+                                (empty($informations["Home"]) ? "None" : $informations["Home"]), 
+                                (empty($informations["Claims"]) ? "None" : $informations["Claims"]),
+                                $informations["Power"], 
+                                $informations["Balance"], 
+                                $informations["Kills"],
+                                $informations["Date"], 
+                                $informations["Leader"],
+                                (empty($informations["Captains"]) ? "None" : $informations["Captains"]),
+                                (empty($informations["Members"]) ? "None" : $informations["Members"]),
+                                (empty($informations["Allies"]) ? "None" : $informations["Allies"])
+                            ], 
+                            $lang["FACTION_INFORMATIONS"]
+                        )
+                    );
+
+                } else {
+
+                    /*
+                     * The sender try to see his faction informations
+                     */
+
+                    /*
+                     * The sender is not on a faction
+                     */
+
+                    if (!$sender->hasFaction()) {
+                        $sender->sendMessage($lang["NO_FACTION"]);
+                        return true;
+                    }
+
+                    /*
+                     * If the sender have a faction
+                     */
+                    $name = $sender->getFaction();
+                    $informations = $sender->getFactionInformations($name);
+                    $sender->sendMessage(
+                        str_replace(
+                            [
+                                "[NAME]", 
+                                "[LEVEL]", 
+                                "[HOME]", 
+                                "[CLAIMS]", 
+                                "[POWER]", 
+                                "[BALANCE]", 
+                                "[KILLS]", 
+                                "[DATE]", 
+                                "[LEADER]", 
+                                "[CAPTAINS]", 
+                                "[MEMBERS]", 
+                                "[ALLIES]"
+                            ], 
+                            [
+                                $name,
+                                (empty($informations["Description"]) ? "None" : $informations["Description"]),
+                                $informations["Level"], 
+                                (empty($informations["Home"]) ? "None" : $informations["Home"]), 
+                                (empty($informations["Claims"]) ? "None" : $informations["Claims"]),
+                                $informations["Power"], 
+                                $informations["Balance"], 
+                                $informations["Kills"],
+                                $informations["Date"], 
+                                $informations["Leader"],
+                                (empty($informations["Captains"]) ? "None" : $informations["Captains"]),
+                                (empty($informations["Members"]) ? "None" : $informations["Members"]),
+                                (empty($informations["Allies"]) ? "None" : $informations["Allies"])
+                            ], 
+                            $lang["FACTION_INFORMATIONS"]
+                        )
+                    );
+
+                }
+
+            }
+
+            /*
+             * This statement allow a player to speak together his faction mates
+             */
+
+            if ($args[0] === "chat") {
+
+                /*
+                 * The sender is not on a faction
+                 */
+
+                if (!$sender->hasFaction()) {
+                    $sender->sendMessage($lang["NO_FACTION"]);
+                    return true;
+                }
+
+                /*
+                 * Check if the sender have already did the command
+                 */
+
+                if ($$fmethods->hasFactionChat($sender->getName())) {
+                    $fmethods->removeFactionChat($sender->getName());
+                    $sender->sendMessage($lang["EXITED_FACTION_CHAT"]);
+                    return true;
+                }
+
+                $fmethods->addFactionChat($sender->getName());
+                $sender->sendMessage($lang["ENTERED_FACTION_CHAT"]);
+
+            }
+
         } else {
             $sender->sendMessage("Please run this command in-game.");
             return true;

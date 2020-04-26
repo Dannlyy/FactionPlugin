@@ -20,13 +20,19 @@ class BaseLang {
 
             "FACTION_INFORMATIONS" => 
                 "§6--} Informations about [NAME] faction" . Color::EOL .
+                "§6Description : [DESCRIPTION]" . Color::EOL .
                 "§6Level : [LEVEL] §r| §6Home : [HOME] | §6Claims : [CLAIMS]" . Color::EOL .
-                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| KILLS : [KILLS]"
-                "§6Created at [DATE]"
-                "§6Leader : [LEADER]",
-                "Captains : [CAPTAINS]",
-                "Members : [MEMBERS]"
-                "Allies : [ALLIES]",                
+                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| KILLS : [KILLS]" . Color::EOL .
+                "§6Created at [DATE]" . Color::EOL .
+                "§6Leader : [LEADER]" . Color::EOL .
+                "Captains : [CAPTAINS]" . Color::EOL .
+                "Members : [MEMBERS]" . Color::EOL .
+                "Allies : [ALLIES]",
+
+            "EXITED_FACTION_CHAT" => "§6--} §r§2Faction chat has been enabled !",
+            "ENTERED_FACTION_CHAT" => "§6--} §r§4Faction chat has been enabled !",
+            "FACTION_CHAT_PREFIX" => "§6{§r[FACTION]§6} §r=> §6",
+
 
             "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",
             "ALERT_CREATED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§2created§r§6 the faction §r§4[NAME]",

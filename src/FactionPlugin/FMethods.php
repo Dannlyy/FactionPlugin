@@ -2,6 +2,8 @@
 
 namespace FactionPlugin;
 
+use FactionPlugin\lang\BaseLang;
+
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
@@ -25,7 +27,7 @@ class FMethods
     public function getFactionInformations($name)
     {
         $file = $this->getFile($name);
-        return $file;
+        return $file->getAll();
     }
 
     /*
@@ -48,7 +50,8 @@ class FMethods
         $second_file = $this->getFile("players_factions"); # It's the second file where we save the name of faction and rank.
 
         $form = [
-            "Home" => [], #Coords of the faction home (middle coords X/Z)
+            "Home" => "", #Coords of the faction home (middle coords X/Z)
+            "Description" => "",
             "Date" => date("Y") . " " . date("m") . " " . date("d"), #Format Year . Month . Day
 
             "Leader" => $player->getName(), #Name of the leader
@@ -57,9 +60,9 @@ class FMethods
             "Allies" => [], #Array of all allies
 
             "Level" => 1, #Faction level
-            "Power" => "0", #Faction Power
-            "Balance" => "0", #Faction balance
-            "Kills" => "0", #Number of kill (all members summered)
+            "Power" => 0, #Faction Power
+            "Balance" => 0, #Faction balance
+            "Kills" => 0, #Number of kill (all members summered)
 
             "Claims" => []
         ];
@@ -87,6 +90,7 @@ class FMethods
         foreach ($file->getAll() as $player => $value) {
             if (strpos($value, $name) !== false) {
                 $file->remove($player);
+                $this->removeFactionChat($player);
             }
         }
 
@@ -175,14 +179,48 @@ class FMethods
     {
 
         $factionPlayers = $this->getFactionPlayers($faction);
+        $lang = BaseLang::translate();
 
         foreach ($factionPlayers as $name) {
 
             $player = Server::getInstance()->getPlayer($name);
-            $player->sendMessage($message);
+            $player->sendMessage(
+                str_replace("[FACTION]", $player->getFaction(), $lang["FACTION_CHAT_PREFIX"]) 
+                . $message
+            );
 
         }
 
+    }
+
+    /*
+     * This function let you see if a player has been turned on faction chat
+     */
+
+    public function hasFactionChat($name)
+    {
+        if (!array_search($name, $this->chat_array)) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * This function let you see how to add a player to his faction chat
+     */
+
+    public function addFactionChat($name)
+    {
+        set($this->chat_array[$name]);
+    }
+
+    /*
+     * This function let you see how to remove a player to his faction chat
+     */
+
+    public function removeFactionChat($name)
+    {
+        unset($this->chat_array[$name]);
     }
 
 }
