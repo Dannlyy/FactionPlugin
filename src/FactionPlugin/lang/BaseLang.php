@@ -18,11 +18,21 @@ class BaseLang {
                 "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
                 "§6/f delete §r-> §6Delete your own faction",
 
+            "FACTION_INFORMATIONS" => 
+                "§6--} Informations about [NAME] faction" . Color::EOL .
+                "§6Level : [LEVEL] §r| §6Home : [HOME] | §6Claims : [CLAIMS]" . Color::EOL .
+                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| KILLS : [KILLS]"
+                "§6Created at [DATE]"
+                "§6Leader : [LEADER]",
+                "Captains : [CAPTAINS]",
+                "Members : [MEMBERS]"
+                "Allies : [ALLIES]",                
+
             "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",
             "ALERT_CREATED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§2created§r§6 the faction §r§4[NAME]",
 
             "DELETED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§4deleted",
-            "ALERT_DELETED_SUCCESS" => "§6--} §r§6Your faction §4[NAME] §6has been §r§4deleted§r§6 successfully",
+            "ALERT_DELETED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§4deleted§r§6 the faction §r§4[NAME]",
 
             "ERROR" => "§6--} §r§4An error occured, please try again",
             "INVALID_PERM" => "§6--} §r§4You don't have the right permission for do that",

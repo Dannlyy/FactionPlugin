@@ -19,6 +19,14 @@ class FMethods
         return new Config(Core::getInstance()->getDataFolder() . $configName . ".json", Config::JSON);
     }
 
+    /*
+     * This function return all indented informations about a faction
+     */
+    public function getFactionInformations($name)
+    {
+        $file = $this->getFile($name);
+        return $file;
+    }
 
     /*
      * This function let you see if the Faction selected exists or not.
@@ -26,7 +34,6 @@ class FMethods
 
     public function existFaction($name)
     {
-
         if (file_exists(Core::getInstance()->getDataFolder() . $name . ".json")) return true;
         return false;
     }
@@ -49,6 +56,7 @@ class FMethods
             "Members" => [], #Array of Members
             "Allies" => [], #Array of all allies
 
+            "Level" => 1, #Faction level
             "Power" => "0", #Faction Power
             "Balance" => "0", #Faction balance
             "Kills" => "0", #Number of kill (all members summered)
@@ -130,7 +138,7 @@ class FMethods
             return "**";
         }
 
-        if ($search[1] === "Officer") {
+        if ($search[1] === "Captains") {
             return "*";
         }
 
