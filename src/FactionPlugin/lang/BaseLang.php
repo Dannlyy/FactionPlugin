@@ -13,15 +13,15 @@ class BaseLang {
 	public static function translate()
 	{
 		return [
+
             "FACTION_HELP" =>
                 "§6--} Faction help" . Color::EOL .
                 "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
                 "§6/f delete §r-> §6Delete your own faction",
 
-            "FACTION_INFORMATIONS" => 
+            "FACTION_INFORMATIONS" =>
                 "§6--} Informations about [NAME] faction" . Color::EOL .
                 "§6Description : [DESCRIPTION]" . Color::EOL .
-                "§6Level : [LEVEL] §r| §6Home : [HOME] | §6Claims : [CLAIMS]" . Color::EOL .
                 "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| KILLS : [KILLS]" . Color::EOL .
                 "§6Created at [DATE]" . Color::EOL .
                 "§6Leader : [LEADER]" . Color::EOL .
@@ -29,13 +29,14 @@ class BaseLang {
                 "Members : [MEMBERS]" . Color::EOL .
                 "Allies : [ALLIES]",
 
-            "EXITED_FACTION_CHAT" => "§6--} §r§2Faction chat has been enabled !",
+            "EXITED_FACTION_CHAT" => "§6--} §r§2Faction chat has been disabled !",
             "ENTERED_FACTION_CHAT" => "§6--} §r§4Faction chat has been enabled !",
-            "FACTION_CHAT_PREFIX" => "§6{§r[FACTION]§6} §r=> §6",
+            "FACTION_CHAT_PREFIX" => "§6{§rFaction§6} §r=> §6",
 
 
             "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",
             "ALERT_CREATED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§2created§r§6 the faction §r§4[NAME]",
+            "NAME_TOO_LONG" => "§6--} §r§4The entered name is too long (more than 12 characters)",
 
             "DELETED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§4deleted",
             "ALERT_DELETED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§4deleted§r§6 the faction §r§4[NAME]",

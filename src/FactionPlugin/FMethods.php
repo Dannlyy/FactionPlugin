@@ -3,7 +3,6 @@
 namespace FactionPlugin;
 
 use FactionPlugin\lang\BaseLang;
-
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
@@ -14,20 +13,12 @@ class FMethods
     private $players_factions; #Data file
 
     private static $file = "players_factions";
+    public static $chat_array = [];
 
 
     public function getFile($configName)
     {
         return new Config(Core::getInstance()->getDataFolder() . $configName . ".json", Config::JSON);
-    }
-
-    /*
-     * This function return all indented informations about a faction
-     */
-    public function getFactionInformations($name)
-    {
-        $file = $this->getFile($name);
-        return $file->getAll();
     }
 
     /*
@@ -54,12 +45,11 @@ class FMethods
             "Description" => "",
             "Date" => date("Y") . " " . date("m") . " " . date("d"), #Format Year . Month . Day
 
-            "Leader" => $player->getName(), #Name of the leader
-            "Officers" => [], #Array of Captains
+            "Leader" => [$player->getName()], #Name of the leader
+            "Captains" => [], #Array of Captains
             "Members" => [], #Array of Members
             "Allies" => [], #Array of all allies
 
-            "Level" => 1, #Faction level
             "Power" => 0, #Faction Power
             "Balance" => 0, #Faction balance
             "Kills" => 0, #Number of kill (all members summered)
@@ -76,6 +66,16 @@ class FMethods
     }
 
     /*
+     * This function allow you to get the faction informations as an array.
+     */
+
+    public function getFactionInformations($name)
+    {
+        $file = $this->getFile($name);
+        return $file->get($name);
+    }
+
+    /*
      * This function let you delete a faction.
      */
 
@@ -87,9 +87,11 @@ class FMethods
 
         @unlink($faction); # Here i delete the faction file.
 
-        foreach ($file->getAll() as $player => $value) {
-            if (strpos($value, $name) !== false) {
-                $file->remove($player);
+        foreach ($this->getFactionPlayers($name) as $player) {
+
+            $file->remove($player);
+
+            if (in_array($player, self::$chat_array)) {
                 $this->removeFactionChat($player);
             }
         }
@@ -158,13 +160,8 @@ class FMethods
     public function getFactionPlayers($faction)
     {
 
-        $file = $this->getFile(self::$file);
-        $playersList = [];
-
-        foreach ($file->getAll() as $player => $value) {
-            if (strpos($value, $faction) !== false)
-                $playersList[] = $player;
-        }
+        $file = $this->getFactionInformations($faction);
+        $playersList = array_merge($file["Officers"], $file["Members"], $file["Leader"]);
 
         return $playersList; # This returned array is containing all the players in the faction (just names and not Objects)
 
@@ -185,7 +182,7 @@ class FMethods
 
             $player = Server::getInstance()->getPlayer($name);
             $player->sendMessage(
-                str_replace("[FACTION]", $player->getFaction(), $lang["FACTION_CHAT_PREFIX"]) 
+                str_replace("[FACTION]", $faction, $lang["FACTION_CHAT_PREFIX"])
                 . $message
             );
 
@@ -194,33 +191,12 @@ class FMethods
     }
 
     /*
-     * This function let you see if a player has been turned on faction chat
-     */
-
-    public function hasFactionChat($name)
-    {
-        if (!array_search($name, $this->chat_array)) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     * This function let you see how to add a player to his faction chat
-     */
-
-    public function addFactionChat($name)
-    {
-        set($this->chat_array[$name]);
-    }
-
-    /*
      * This function let you see how to remove a player to his faction chat
      */
 
-    public function removeFactionChat($name)
+    public function removeFactionChat($player)
     {
-        unset($this->chat_array[$name]);
+        unset(self::$chat_array[$player]);
     }
 
 }

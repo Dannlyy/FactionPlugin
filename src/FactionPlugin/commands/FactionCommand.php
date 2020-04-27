@@ -27,7 +27,9 @@ class FactionCommand extends PluginCommand
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
+
         if ($sender instanceof FPlayer) {
+
             $lang = BaseLang::translate();
             $fmethods = new FMethods();
 
@@ -51,15 +53,21 @@ class FactionCommand extends PluginCommand
 
             if($args[0] === "create") {
 
+                if ($sender->hasFaction()) {
+                    $sender->sendMessage($lang["ALREADY_IN_FAC"]);
+                    return true;
+                }
+
                 /*
                  * If we have a name and args[1] (name) is alphanumeric
                  */
 
-                if (!empty($args[1]) && ctype_alnum($args[1]) && strlen($args[1]) =< 12) {
+                if (!empty($args[1]) && ctype_alnum($args[1])) {
+
                     $name = $args[1];
 
-                    if ($sender->hasFaction()) {
-                        $sender->sendMessage($lang["ALREADY_IN_FAC"]);
+                    if (strlen($args[1]) > 12) {
+                        $sender->sendMessage($lang["NAME_TOO_LONG"]);
                         return true;
                     }
 
@@ -99,6 +107,7 @@ class FactionCommand extends PluginCommand
                      */
 
                 } else {
+
                     $sender->sendMessage($lang["INVALID_FAC_NAME"]);
                 }
 
@@ -147,7 +156,7 @@ class FactionCommand extends PluginCommand
                     str_replace(
                         ["[PLAYER]", "[NAME]"],
                         [$sender->getName(), $name],
-                        $lang["ALERT_CREATED_SUCCESS"]
+                        $lang["ALERT_DELETED_SUCCESS"]
                     )
                 );
 
@@ -159,7 +168,9 @@ class FactionCommand extends PluginCommand
 
             if ($args[0] === "info") {
 
-                if (empty($args[1])) {
+                if (!empty($args[1])) {
+
+                    $name = $args[1];
 
                     /*
                      * The faction name does not exist
@@ -170,29 +181,22 @@ class FactionCommand extends PluginCommand
                         return true;
                     }
 
-                    $name = $args[1];
-                    $informations = $sender->getFactionInformations($name);
+                    $informations = $fmethods->getFactionInformations($name);
                     $sender->sendMessage(
                         str_replace(
                             [
-                                "[NAME]", 
-                                "[LEVEL]", 
-                                "[HOME]", 
-                                "[CLAIMS]", 
-                                "[POWER]", 
-                                "[BALANCE]", 
-                                "[KILLS]", 
-                                "[DATE]", 
-                                "[LEADER]", 
-                                "[CAPTAINS]", 
-                                "[MEMBERS]", 
+                                "[NAME]",
+                                "[POWER]",
+                                "[BALANCE]",
+                                "[KILLS]",
+                                "[DATE]",
+                                "[LEADER]",
+                                "[CAPTAINS]",
+                                "[MEMBERS]",
                                 "[ALLIES]"
                             ], 
                             [
                                 $name,
-                                $informations["Level"], 
-                                (empty($informations["Home"]) ? "None" : $informations["Home"]), 
-                                (empty($informations["Claims"]) ? "None" : $informations["Claims"]),
                                 $informations["Power"], 
                                 $informations["Balance"], 
                                 $informations["Kills"],
@@ -225,29 +229,26 @@ class FactionCommand extends PluginCommand
                      * If the sender have a faction
                      */
                     $name = $sender->getFaction();
-                    $informations = $sender->getFactionInformations($name);
+                    $informations = $sender->getFactionInformations();
                     $sender->sendMessage(
                         str_replace(
                             [
-                                "[NAME]", 
-                                "[LEVEL]", 
-                                "[HOME]", 
-                                "[CLAIMS]", 
-                                "[POWER]", 
-                                "[BALANCE]", 
-                                "[KILLS]", 
-                                "[DATE]", 
-                                "[LEADER]", 
-                                "[CAPTAINS]", 
-                                "[MEMBERS]", 
+                                "[NAME]",
+                                "[LEVEL]",
+                                "[HOME]",
+                                "[CLAIMS]",
+                                "[POWER]",
+                                "[BALANCE]",
+                                "[KILLS]",
+                                "[DATE]",
+                                "[LEADER]",
+                                "[CAPTAINS]",
+                                "[MEMBERS]",
                                 "[ALLIES]"
                             ], 
                             [
                                 $name,
                                 (empty($informations["Description"]) ? "None" : $informations["Description"]),
-                                $informations["Level"], 
-                                (empty($informations["Home"]) ? "None" : $informations["Home"]), 
-                                (empty($informations["Claims"]) ? "None" : $informations["Claims"]),
                                 $informations["Power"], 
                                 $informations["Balance"], 
                                 $informations["Kills"],
