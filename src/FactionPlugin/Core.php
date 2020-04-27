@@ -12,12 +12,15 @@ class Core extends PluginBase
 {
 
     private static $instance;
+    private static $methods;
 
     public function onEnable()
     {
 
-        $this->getLogger()->info(Color::DARK_GREEN . " The plugin has been enabled succesfully.");
+        $this->getLogger()->info(Color::DARK_GREEN . " The plugin has been enabled successfully.");
+
         self::$instance = $this;
+        self::$methods = new FMethods();
 
         $command = $this->getServer()->getCommandMap();
         $command->register("f", new FactionCommand($this));
@@ -43,6 +46,15 @@ class Core extends PluginBase
     public static function getInstance()
     {
         return self::$instance;
+    }
+
+    /*
+     * This function return the FMethods instance.
+     */
+
+    public static function getMethods()
+    {
+        return self::$methods;
     }
 
 }

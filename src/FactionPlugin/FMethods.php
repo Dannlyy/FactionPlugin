@@ -13,7 +13,9 @@ class FMethods
     private $players_factions; #Data file
 
     private static $file = "players_factions";
-    public static $chat_array = [];
+
+    public $chat_array = [];
+    public $desc = [];
 
 
     public function getFile($configName)
@@ -40,24 +42,19 @@ class FMethods
         $file = $this->getFile($name); # We create for each Faction a file.
         $second_file = $this->getFile("players_factions"); # It's the second file where we save the name of faction and rank.
 
-        $form = [
-            "Home" => "", #Coords of the faction home (middle coords X/Z)
-            "Description" => "",
-            "Date" => date("Y") . " " . date("m") . " " . date("d"), #Format Year . Month . Day
+        $file->set("Name", $name);
+        $file->set("Home", "");
+        $file->set("Description", "");
+        $file->set("Date", date("Y") . " " . date("m") . " " . date("d"));
+        $file->set("Leader", $player->getName());
+        $file->set("Captains", []);
+        $file->set("Members", []);
+        $file->set("Allies", []);
+        $file->set("Power", 0);
+        $file->set("Balance", 0);
+        $file->set("Kills", 0);
+        $file->set("Claims", []);
 
-            "Leader" => [$player->getName()], #Name of the leader
-            "Captains" => [], #Array of Captains
-            "Members" => [], #Array of Members
-            "Allies" => [], #Array of all allies
-
-            "Power" => 0, #Faction Power
-            "Balance" => 0, #Faction balance
-            "Kills" => 0, #Number of kill (all members summered)
-
-            "Claims" => []
-        ];
-
-        $file->set($name, $form); # Here i save the informations of the faction.
         $file->save();
 
         $second_file->set($player->getName(), $name . " Leader"); # Here i save the second file informations.
@@ -65,15 +62,6 @@ class FMethods
 
     }
 
-    /*
-     * This function allow you to get the faction informations as an array.
-     */
-
-    public function getFactionInformations($name)
-    {
-        $file = $this->getFile($name);
-        return $file->get($name);
-    }
 
     /*
      * This function let you delete a faction.
@@ -85,21 +73,19 @@ class FMethods
         $file = $this->getFile("players_factions");
         $faction = Core::getInstance()->getDataFolder() . $name . ".json"; # This is the faction file.
 
-        @unlink($faction); # Here i delete the faction file.
-
         foreach ($this->getFactionPlayers($name) as $player) {
 
             $file->remove($player);
 
-            if (in_array($player, self::$chat_array)) {
+            if (in_array($player, $this->chat_array)) {
                 $this->removeFactionChat($player);
             }
         }
 
+        @unlink($faction); # Here i delete the faction file.
         $file->save();
 
     }
-
     /*
      * This function let you see if a player have a  faction
      */
@@ -160,8 +146,8 @@ class FMethods
     public function getFactionPlayers($faction)
     {
 
-        $file = $this->getFactionInformations($faction);
-        $playersList = array_merge($file["Officers"], $file["Members"], $file["Leader"]);
+        $file = $this->getFile($faction);
+        $playersList = array_merge((array)$file->get("Leader"), $file->get("Captains"), $file->get("Members"));
 
         return $playersList; # This returned array is containing all the players in the faction (just names and not Objects)
 
@@ -182,7 +168,7 @@ class FMethods
 
             $player = Server::getInstance()->getPlayer($name);
             $player->sendMessage(
-                str_replace("[FACTION]", $faction, $lang["FACTION_CHAT_PREFIX"])
+                $lang["FACTION_CHAT_PREFIX"]
                 . $message
             );
 
@@ -191,12 +177,70 @@ class FMethods
     }
 
     /*
+     * This function let you change the description of faction.
+     */
+
+    public function setDescription($faction, $desc)
+    {
+
+        $file = $this->getFile($faction);
+
+        $file->set("Description", $desc);
+        $file->save();
+
+    }
+
+    /*
+     * This function allow to update power of a faction.
+     */
+
+    public function setPower($faction, $power)
+    {
+
+        $file = $this->getFile($faction);
+
+        $file->set("Power", $this->getPower($faction) + $power);
+        $file->save();
+
+    }
+
+    /*
+     * This function return the description.
+     */
+
+    public function getSpecificInformation($faction, $information)
+    {
+        $file = $this->getFile($faction);
+        return $file->get($information);
+    }
+
+    /*
+     * This function return the power of a faction.
+     */
+
+    public function getPower($faction)
+    {
+        $information = $this->getFile($faction);
+        return $information->get("Power");
+    }
+
+    /*
+     * This function allow to get the allies of a faction.
+     */
+
+    public function getAllies($faction)
+    {
+        $information = $this->getFile($faction);
+        return $information->get("Allies");
+    }
+
+    /*
      * This function let you see how to remove a player to his faction chat
      */
 
     public function removeFactionChat($player)
     {
-        unset(self::$chat_array[$player]);
+        unset($this->chat_array[$player]);
     }
 
 }

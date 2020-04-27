@@ -63,7 +63,7 @@ class FPlayer extends Player
 
     public function hasFactionChat()
     {
-        if (!in_array($this->getName(), FMethods::$chat_array)) {
+        if (!in_array($this->getName(), Core::getMethods()->chat_array)) {
             return false;
         }
         return true;
@@ -75,7 +75,7 @@ class FPlayer extends Player
 
     public function addFactionChat()
     {
-        FMethods::$chat_array[] = $this->getName();
+        Core::getMethods()->chat_array[] = $this->getName();
     }
 
     /*
@@ -84,7 +84,10 @@ class FPlayer extends Player
 
     public function removeFactionChat()
     {
-        unset(FMethods::$chat_array[$this->getName()]);
+        if ($this->hasFactionChat()) {
+            unset(Core::getMethods()->chat_array[$this->getName()]);
+        }
+
     }
 
     /*

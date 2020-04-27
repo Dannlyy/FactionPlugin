@@ -34,7 +34,13 @@ class FactionCommand extends PluginCommand
             $fmethods = new FMethods();
 
             if (empty($args)) {
+
                 $sender->sendMessage($lang["INVALID_COMMAND"]);
+
+                var_dump(
+                    $fmethods->getFile($sender->getFaction())->get($sender->getFaction())["Leader"]
+                );
+
                 return true;
             }
 
@@ -181,11 +187,11 @@ class FactionCommand extends PluginCommand
                         return true;
                     }
 
-                    $informations = $fmethods->getFactionInformations($name);
                     $sender->sendMessage(
                         str_replace(
                             [
                                 "[NAME]",
+                                "[DESCRIPTION]",
                                 "[POWER]",
                                 "[BALANCE]",
                                 "[KILLS]",
@@ -194,17 +200,18 @@ class FactionCommand extends PluginCommand
                                 "[CAPTAINS]",
                                 "[MEMBERS]",
                                 "[ALLIES]"
-                            ], 
+                            ],
                             [
                                 $name,
-                                $informations["Power"], 
-                                $informations["Balance"], 
-                                $informations["Kills"],
-                                $informations["Date"], 
-                                $informations["Leader"],
-                                (empty($informations["Captains"]) ? "None" : $informations["Captains"]),
-                                (empty($informations["Members"]) ? "None" : $informations["Members"]),
-                                (empty($informations["Allies"]) ? "None" : $informations["Allies"])
+                                $fmethods->getSpecificInformation($name, "Description"),
+                                $fmethods->getSpecificInformation($name, "Power"),
+                                $fmethods->getSpecificInformation($name, "Balance"),
+                                $fmethods->getSpecificInformation($name, "Kills"),
+                                $fmethods->getSpecificInformation($name, "Date"),
+                                $fmethods->getSpecificInformation($name, "Leader"),
+                                (empty($fmethods->getSpecificInformation($name, "Captains")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Captains"))),
+                                (empty($fmethods->getSpecificInformation($name, "Members")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Members"))),
+                                (empty($fmethods->getSpecificInformation($name, "Allies")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Allies")))
                             ], 
                             $lang["FACTION_INFORMATIONS"]
                         )
@@ -229,14 +236,12 @@ class FactionCommand extends PluginCommand
                      * If the sender have a faction
                      */
                     $name = $sender->getFaction();
-                    $informations = $sender->getFactionInformations();
+
                     $sender->sendMessage(
                         str_replace(
                             [
                                 "[NAME]",
-                                "[LEVEL]",
-                                "[HOME]",
-                                "[CLAIMS]",
+                                "[DESCRIPTION]",
                                 "[POWER]",
                                 "[BALANCE]",
                                 "[KILLS]",
@@ -245,19 +250,19 @@ class FactionCommand extends PluginCommand
                                 "[CAPTAINS]",
                                 "[MEMBERS]",
                                 "[ALLIES]"
-                            ], 
+                            ],
                             [
                                 $name,
-                                (empty($informations["Description"]) ? "None" : $informations["Description"]),
-                                $informations["Power"], 
-                                $informations["Balance"], 
-                                $informations["Kills"],
-                                $informations["Date"], 
-                                $informations["Leader"],
-                                (empty($informations["Captains"]) ? "None" : $informations["Captains"]),
-                                (empty($informations["Members"]) ? "None" : $informations["Members"]),
-                                (empty($informations["Allies"]) ? "None" : $informations["Allies"])
-                            ], 
+                                $fmethods->getSpecificInformation($name, "Description"),
+                                $fmethods->getSpecificInformation($name, "Power"),
+                                $fmethods->getSpecificInformation($name, "Balance"),
+                                $fmethods->getSpecificInformation($name, "Kills"),
+                                $fmethods->getSpecificInformation($name, "Date"),
+                                $fmethods->getSpecificInformation($name, "Leader"),
+                                (empty($fmethods->getSpecificInformation($name, "Captains")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Captains"))),
+                                (empty($fmethods->getSpecificInformation($name, "Members")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Members"))),
+                                (empty($fmethods->getSpecificInformation($name, "Allies")) ? "None" : implode(", ", $fmethods->getSpecificInformation($name, "Allies")))
+                            ],
                             $lang["FACTION_INFORMATIONS"]
                         )
                     );
@@ -285,14 +290,61 @@ class FactionCommand extends PluginCommand
                  * Check if the sender have already did the command
                  */
 
-                if ($$fmethods->hasFactionChat($sender->getName())) {
-                    $fmethods->removeFactionChat($sender->getName());
+                if ($sender->hasFactionChat()) {
+
+                    $sender->removeFactionChat();
                     $sender->sendMessage($lang["EXITED_FACTION_CHAT"]);
                     return true;
                 }
 
-                $fmethods->addFactionChat($sender->getName());
+                $sender->addFactionChat();
                 $sender->sendMessage($lang["ENTERED_FACTION_CHAT"]);
+
+            }
+
+            /*
+             * This statement let us to set a description to your faction.
+             */
+
+            if ($args[0] === "desc") {
+
+                /*
+                 * See if the player has a faction.
+                 */
+
+                if (!$sender->hasFaction()) {
+                    $sender->sendMessage($lang["NO_FACTION"]);
+                    return true;
+                }
+
+                /*
+                 * Check if the player has the permision.
+                 */
+
+                if ($sender->getFactionRank() !== "Leader") {
+                    $sender->sendMessage($lang["INVALID_PERM"]);
+                    return true;
+                }
+
+                /*
+                 * Check if the description is empty.
+                 */
+
+                if (empty($args[1])) {
+                    $sender->sendMessage($lang["EMPTY_DESC"]);
+                    return true;
+                }
+
+                if (!empty($args[1]) && ctype_alnum($args[1])) {
+
+                    $sender->sendMessage($lang["DESC_TIMER"]);
+                    $fmethods->desc[$sender->getName()] = time() + 45;
+
+                } else {
+
+                    $sender->sendMessage($lang["WRONG_FORMAT"]);
+
+                }
 
             }
 

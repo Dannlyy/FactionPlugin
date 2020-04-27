@@ -17,7 +17,8 @@ class BaseLang {
             "FACTION_HELP" =>
                 "§6--} Faction help" . Color::EOL .
                 "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
-                "§6/f delete §r-> §6Delete your own faction",
+                "§6/f delete §r-> §6Delete your own faction" . Color::EOL .
+                "§6/f info §r-> §6See a faction information",
 
             "FACTION_INFORMATIONS" =>
                 "§6--} Informations about [NAME] faction" . Color::EOL .
@@ -31,7 +32,15 @@ class BaseLang {
 
             "EXITED_FACTION_CHAT" => "§6--} §r§2Faction chat has been disabled !",
             "ENTERED_FACTION_CHAT" => "§6--} §r§4Faction chat has been enabled !",
-            "FACTION_CHAT_PREFIX" => "§6{§rFaction§6} §r=> §6",
+            "FACTION_CHAT_PREFIX" => "§6[§rFaction§6] §6",
+
+            "EMPTY_DESC" => "§6--} §4Please write your description (55 characters maximum)",
+            "DESC_TOO_LONG" => "§6--} §4Your description is too long (55 characters maximum)",
+            "DESC_ADDED_SUCCESS" => "§6--} §4The description of the fac has been changed successfully",
+            "DESC_TIMER" => "§6--} §4You have 45 seconds to write the description.",
+            "DESC_TIMEOUT" => "§6--} §4Time out, use §6/f desc §4to write the description again.",
+
+            "WRONG_FORMAT" => "§6--} §4Please enter the right format.",
 
 
             "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",
