@@ -177,6 +177,25 @@ class FMethods
     }
 
     /*
+     * This function let you see how to remove a player to his faction chat
+     */
+
+    public function removeFactionChat($player)
+    {
+        unset($this->chat_array[$player]);
+    }
+
+    /*
+     * This function allow to get the allies of a faction.
+     */
+
+    public function getAllies($faction)
+    {
+        $information = $this->getFile($faction);
+        return $information->get("Allies");
+    }
+
+    /*
      * This function let you change the description of faction.
      */
 
@@ -188,6 +207,16 @@ class FMethods
         $file->set("Description", $desc);
         $file->save();
 
+    }
+
+    /*
+     * This function return the description.
+     */
+
+    public function getSpecificInformation($faction, $information)
+    {
+        $file = $this->getFile($faction);
+        return $file->get($information);
     }
 
     /*
@@ -204,15 +233,6 @@ class FMethods
 
     }
 
-    /*
-     * This function return the description.
-     */
-
-    public function getSpecificInformation($faction, $information)
-    {
-        $file = $this->getFile($faction);
-        return $file->get($information);
-    }
 
     /*
      * This function return the power of a faction.
@@ -222,25 +242,6 @@ class FMethods
     {
         $information = $this->getFile($faction);
         return $information->get("Power");
-    }
-
-    /*
-     * This function allow to get the allies of a faction.
-     */
-
-    public function getAllies($faction)
-    {
-        $information = $this->getFile($faction);
-        return $information->get("Allies");
-    }
-
-    /*
-     * This function let you see how to remove a player to his faction chat
-     */
-
-    public function removeFactionChat($player)
-    {
-        unset($this->chat_array[$player]);
     }
 
 }

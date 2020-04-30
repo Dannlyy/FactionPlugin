@@ -36,11 +36,6 @@ class FactionCommand extends PluginCommand
             if (empty($args)) {
 
                 $sender->sendMessage($lang["INVALID_COMMAND"]);
-
-                var_dump(
-                    $fmethods->getFile($sender->getFaction())->get($sender->getFaction())["Leader"]
-                );
-
                 return true;
             }
 
