@@ -220,6 +220,10 @@ class FMethods
     }
 
     /*
+     * T
+     */
+
+    /*
      * This function allow to update power of a faction.
      */
 
@@ -242,6 +246,26 @@ class FMethods
     {
         $information = $this->getFile($faction);
         return $information->get("Power");
+    }
+
+    /*
+     * This function allow you to see if the 2 players are allies.
+     */
+
+    public function areAllies(FPlayer $player, FPlayer $second)
+    {
+
+        if (!$player->hasFaction() or !$second->hasFaction()) return false;
+
+        $faction = $this->getAllies($player->getFaction());
+        $faction2 = $second->getFaction();
+
+        if (in_array($faction2, $faction)) {
+            return true;
+        }
+
+        return false;
+
     }
 
 }

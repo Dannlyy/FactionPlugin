@@ -4,6 +4,7 @@ namespace FactionPlugin;
 
 use FactionPlugin\commands\FactionCommand;
 use FactionPlugin\listener\FactionListener;
+use FactionPlugin\listener\FightListener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as Color;
@@ -26,6 +27,7 @@ class Core extends PluginBase
         $command->register("f", new FactionCommand($this));
 
         $this->getServer()->getPluginManager()->registerEvents(new FactionListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new FightListener(), $this);
 
         if (!$this->getDataFolder()) {
 
