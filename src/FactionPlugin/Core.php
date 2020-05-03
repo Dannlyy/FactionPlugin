@@ -60,4 +60,13 @@ class Core extends PluginBase
         return self::$methods;
     }
 
+    /*
+     * This function return ressources/$name.yml instance of Config with value of constant or not
+     */
+    public static function getConfigFile($name, $constant = null)
+    {
+        /* Return constant wished by the user or all the file */
+        if($constant) return (new Config("plugins/FactionPlugin/ressources/" . $name . ".yml", Config::YAML))->get($constant);
+        return (new Config("plugins/FactionPlugin/ressources/" . $name . ".yml", Config::YAML))->getAll();
+    }
 }

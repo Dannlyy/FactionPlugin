@@ -1,7 +1,8 @@
-factions:
+faction:
 
   max_members: 8
   max_allies: 2
+  power: 8
   default_level: 1
 
 claims_features:

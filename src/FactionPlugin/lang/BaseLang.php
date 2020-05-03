@@ -35,6 +35,10 @@ class BaseLang {
             "ENTERED_FACTION_CHAT" => "§6--} §r§4Faction chat has been enabled !",
             "FACTION_CHAT_PREFIX" => "§6[§rFaction§6] §6",
 
+            "EXITED_ALLY_CHAT" => "§6--} §r§2Ally chat has been disabled !",
+            "ENTERED_ALLY_CHAT" => "§6--} §r§4Ally chat has been enabled !",
+            "ALLY_CHAT_PREFIX" => "§4[§rAlly§4] §4",
+
             "EMPTY_DESC" => "§6--} §4Please write your description (55 characters maximum)",
             "DESC_TOO_LONG" => "§6--} §4Your description is too long (55 characters maximum)",
             "DESC_ADDED_SUCCESS" => "§6--} §4The description of the fac has been changed successfully",

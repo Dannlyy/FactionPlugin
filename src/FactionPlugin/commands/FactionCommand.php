@@ -282,6 +282,16 @@ class FactionCommand extends PluginCommand
                 }
 
                 /*
+                 * Check if the sender have already did the ally chat command
+                 */
+
+                if ($sender->hasAllyChat()) {
+                    $sender->removeAllyChat();
+                    $sender->sendMessage($lang["EXITED_ALLY_CHAT"]);
+                    return true;
+                }
+
+                /*
                  * Check if the sender have already did the command
                  */
 
@@ -294,6 +304,46 @@ class FactionCommand extends PluginCommand
 
                 $sender->addFactionChat();
                 $sender->sendMessage($lang["ENTERED_FACTION_CHAT"]);
+
+            }
+
+            /*
+             * This statement allow a player to speak together his ally mates
+             */
+
+            if ($args[0] === "allychat") {
+                /*
+                 * The sender is not on a faction
+                 */
+
+                if (!$sender->hasFaction()) {
+                    $sender->sendMessage($lang["NO_FACTION"]);
+                    return true;
+                }
+
+                /*
+                 * Check if the sender have already did the faction chat command
+                 */
+
+                if ($sender->hasFactionChat()) {
+                    $sender->removeFactionChat();
+                    $sender->sendMessage($lang["EXITED_FACTION_CHAT"]);
+                    return true;
+                }
+
+                /*
+                 * Check if the sender have already did the ally chat command
+                 */
+
+                if ($sender->hasAllyChat()) {
+                    $sender->removeAllyChat();
+                    $sender->sendMessage($lang["REMOVE_ALLY_CHAT"]);
+                    return true;
+                }
+
+                $sender->addAllyChat();
+                $sender->sendMessage($lang["ENTERED_ALLY_CHAT"]);
+
 
             }
 

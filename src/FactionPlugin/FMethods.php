@@ -13,6 +13,7 @@ class FMethods
     private static $file = "info/players_factions";
 
     public $chat_array = [];
+    public $allychat_array = [];
     public $desc = [];
 
 
@@ -139,7 +140,6 @@ class FMethods
 
     /*
      * This function allow you to get all players of a specific faction.
-     * PS : We use this to send message to the whole faction ect..
      */
 
     public function getFactionPlayers($faction)
@@ -153,8 +153,26 @@ class FMethods
     }
 
     /*
+     * This function allow you to get all players of his allies.
+     */
+
+    public function getAllyPlayers($faction)
+    {
+
+        $file = $this->getFile($faction);
+        $allies = $file->get("Allies");
+        $playersList = [];
+
+        foreach ($allies as $ally) {
+            $playersList += $this->getFactionPlayers($ally);
+        }
+
+        return $playersList; # This returned array is containing all the players on all ally's factions (just names and not Objects)
+
+    }
+
+    /*
      * This function allow to send messages to a specific faction.
-     * PS : We use this function for faction chat or ally chat or to send message to the whole faction.
      */
 
     public function sendMessageToFaction($faction, $message)
@@ -176,12 +194,25 @@ class FMethods
     }
 
     /*
-     * This function let you see how to remove a player to his faction chat
+     * This function allow to send messages to a his allies.
      */
 
-    public function removeFactionChat($player)
+    public function sendMessageToAlly($faction, $message)
     {
-        unset($this->chat_array[$player]);
+
+        $factionPlayers = $this->getAllyPlayers($faction);
+        $lang = BaseLang::translate();
+
+        foreach ($allyPlayers as $name) {
+
+            $player = Server::getInstance()->getPlayer($name);
+            $player->sendMessage(
+                $lang["ALLY_CHAT_PREFIX"]
+                . $message
+            );
+
+        }
+
     }
 
     /*

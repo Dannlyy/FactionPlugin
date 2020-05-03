@@ -91,6 +91,41 @@ class FPlayer extends Player
     }
 
     /*
+    * This function let you see if a player has been turned on ally chat
+    */
+
+    public function hasAllyChat()
+    {
+        if (!in_array($this->getName(), Core::getMethods()->allychat_array)) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * This function let you see how to add a player to his faction chat
+     */
+
+    public function addAllyChat()
+    {
+        Core::getMethods()->allychat_array[] = $this->getName();
+    }
+
+    /*
+     * This function let you see how to remove a player to his faction chat
+     */
+
+    public function removeAllyChat()
+    {
+        if ($this->hasFactionChat()) {
+            unset(Core::getMethods()->allychat_array[$this->getName()]);
+        }
+
+    }
+
+
+
+    /*
      * This function allow you tu get faction information as an array.
      */
 

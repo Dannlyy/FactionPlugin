@@ -13,7 +13,7 @@ use pocketmine\event\player\PlayerCreationEvent;
 class FactionListener implements Listener
 {
 
-    public function factionChat(PlayerChatEvent $event)
+    public function customChat(PlayerChatEvent $event)
     {
 
         $player = $event->getPlayer();
@@ -42,6 +42,11 @@ class FactionListener implements Listener
             $event->setCancelled();
             $fmethods->sendMessageToFaction($player->getFaction(), $player->getName() . " §r-> " . $event->getMessage());
 
+        }
+
+        if ($player->hasAllyChat()) {
+            $event->setCancelled();
+            $fmethods->sendMessageToAlly($player->getFaction(), $player->getName() . " §r-> " . $event->getMessage());
         }
     }
 

@@ -45,17 +45,25 @@ class FightListener implements Listener
             }
 
             /*
-             * This part of the code give the two function
+             * This part of the code give the statement for add power on death
              */
 
-            if ($entity->hasFaction()) {
-                $faction = $entity->getFaction();
-                Core::getMethods()->setPower($faction, -8);
-            }
-
             if ($damager->hasFaction()) {
-                $faction = $damager->getFaction();
-                Core::getMethods()->setPower($faction, 8);
+                if ($entity->getHealth() === 0) {
+
+                    if($entity->hasFaction()) {
+                        $damager_faction = $damager->getFaction();
+                        Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"] );
+
+                        $entity_faction = $entity->getFaction();
+                        Core::getMethods()->setPower($entity_faction, -(Core::getConfigFile("configuration", "faction")["power"]) );
+
+                    } else {
+                        $damager_faction = $damager->getFaction();
+                        Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"] );
+                    }
+
+                }
             }
 
         }
