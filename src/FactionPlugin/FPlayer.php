@@ -22,7 +22,7 @@ class FPlayer extends Player
     public function getFaction()
     {
 
-        $file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::JSON);
+        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
 
         $search = explode(" ", $file->get($this->getName()));
         return $search[0];
@@ -36,7 +36,7 @@ class FPlayer extends Player
     public function getFactionRank()
     {
 
-        $file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::JSON);
+        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
 
         $search = explode(" ", $file->get($this->getName()));
         return $search[1];
@@ -49,7 +49,7 @@ class FPlayer extends Player
 
     public function hasFaction()
     {
-        $file = new Config(Core::getInstance()->getDataFolder() . "players_factions.json", Config::JSON);
+        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
         if ($file->exists($this->getName())) {
             return true;
         }

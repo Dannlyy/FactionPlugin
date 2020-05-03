@@ -316,7 +316,7 @@ class FactionCommand extends PluginCommand
                  * Check if the player has the permision.
                  */
 
-                if ($sender->getFactionRank() !== "Leader") {
+                if ($sender->getFactionRank() !== "Leader" or $sender->getFactionRank() !== "Captains") {
                     $sender->sendMessage($lang["INVALID_PERM"]);
                     return true;
                 }
@@ -341,6 +341,38 @@ class FactionCommand extends PluginCommand
 
                 }
 
+            }
+
+            if ($args[0] === "top") {
+                /*
+                 * When there is no type defined we send the kills
+                 */
+
+                if (empty($args[1])) {
+                    $fmethods->getTopFactions($sender, "Kills");
+                    return true;
+                }
+
+                if (!empty($args[1])) {
+
+                    if ($args[1] === "Balance") {
+
+                        $fmethods->getTopFactions($sender, "Balance");
+                        return true;
+
+                    } elseif ($args[1] === "Kills") {
+
+                        $fmethods->getTopFactions($sender, "Kills");
+                        return true;
+
+                    } else {
+
+                        $sender->sendMessage($lang["WRONG_LIST_TYPE"]);
+                        return true;
+
+                    }
+
+                }
             }
 
         } else {

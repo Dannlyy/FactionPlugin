@@ -18,12 +18,13 @@ class BaseLang {
                 "§6--} Faction help" . Color::EOL .
                 "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
                 "§6/f delete §r-> §6Delete your own faction" . Color::EOL .
-                "§6/f info §r-> §6See a faction information",
+                "§6/f info §r-> §6See a faction information" . Color::EOL .
+                "§6/f top §r-> §6Get the classement of Factions.",
 
             "FACTION_INFORMATIONS" =>
                 "§6--} Informations about [NAME] faction" . Color::EOL .
                 "§6Description : [DESCRIPTION]" . Color::EOL .
-                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| KILLS : [KILLS]" . Color::EOL .
+                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| §6Kills : [KILLS]" . Color::EOL .
                 "§6Created at [DATE]" . Color::EOL .
                 "§6Leader : [LEADER]" . Color::EOL .
                 "Captains : [CAPTAINS]" . Color::EOL .
@@ -41,6 +42,7 @@ class BaseLang {
             "DESC_TIMEOUT" => "§6--} §4Time out, use §6/f desc §4to write the description again.",
 
             "WRONG_FORMAT" => "§6--} §4Please enter the right format.",
+            "WRONG_LIST_TYPE" => "§6--} §4Please choose §6Kills §4or §6Balance §4to get the list.",
 
 
             "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",

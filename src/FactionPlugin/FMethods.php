@@ -10,9 +10,7 @@ class FMethods
 {
 
     private $factions; #Data file
-    private $players_factions; #Data file
-
-    private static $file = "players_factions";
+    private static $file = "info/players_factions";
 
     public $chat_array = [];
     public $desc = [];
@@ -40,7 +38,7 @@ class FMethods
     public function createFaction(FPlayer $player, $name)
     {
         $file = $this->getFile($name); # We create for each Faction a file.
-        $second_file = $this->getFile("players_factions"); # It's the second file where we save the name of faction and rank.
+        $second_file = $this->getFile("info/players_factions"); # It's the second file where we save the name of faction and rank.
 
         $file->set("Name", $name);
         $file->set("Home", "");
@@ -70,7 +68,7 @@ class FMethods
     public function removeFaction($name)
     {
 
-        $file = $this->getFile("players_factions");
+        $file = $this->getFile("info/players_factions");
         $faction = Core::getInstance()->getDataFolder() . $name . ".json"; # This is the faction file.
 
         foreach ($this->getFactionPlayers($name) as $player) {
@@ -79,6 +77,7 @@ class FMethods
 
             if (in_array($player, $this->chat_array)) {
                 $this->removeFactionChat($player);
+                unset($this->desc[$player]);
             }
         }
 
@@ -93,7 +92,7 @@ class FMethods
     public function hasFaction($playerName)
     {
 
-        $file = $this->getFile("players_factions");
+        $file = $this->getFile("info/players_factions");
         if ($file->exists($this->getName())) {
             return true;
         }
@@ -107,7 +106,7 @@ class FMethods
 
     public function getPlayerFaction($playerName)
     {
-        $file = $this->getFile("players_factions");
+        $file = $this->getFile("info/players_factions");
 
         if ($this->hasFaction($playerName)) {
             $search = explode(" ", $file->get($playerName));
@@ -123,7 +122,7 @@ class FMethods
 
     public function getFactionRank($playerName)
     {
-        $file = $this->getFile("players_factions");
+        $file = $this->getFile("info/players_factions");
         $search = explode(" ", $file->get($playerName));
 
         if ($search[1] === "Leader") {
@@ -265,6 +264,36 @@ class FMethods
         }
 
         return false;
+
+    }
+
+    /*
+     * This function show you the top kills/ Balance. (TO FIX)
+     */
+
+    public function getTopFactions(FPlayer $player, $type)
+    {
+        $directory = scandir(Core::getInstance()->getDataFolder());
+        $message = [];
+
+        $top = 1;
+
+        foreach ($directory as $files) {
+            $fileName = pathinfo(Core::getInstance()->getDataFolder() . $files);
+
+            $file = $this->getFile($fileName["filename"]);
+            $array[$files] = $file->get($type);
+        }
+
+        foreach ($array as $factions => $value) {
+            if ($top === 10) break;
+            $message[] = "§9(§6#{$top}§9) - §6{$factions} §favec un total de kills égale à §6{$value}\n";
+
+            $top++;
+        }
+
+        $message = implode(" ", $message);
+        return $player->sendMessage("§9[§6Classement§9] §fVoici le classement de {$type} de faction : \n\n{$message}\n\n§f- Vous pouvez voir aussi le classement de faction avec §6/f top <Kills/Balance>.");
 
     }
 

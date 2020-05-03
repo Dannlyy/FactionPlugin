@@ -32,6 +32,7 @@ class Core extends PluginBase
         if (!$this->getDataFolder()) {
 
             @mkdir($this->getDataFolder());
+            @mkdir($this->getDataFolder() . "/info");
             $create_file = new Config($this->getDataFolder() . "players_factions.json", Config::YAML);
         }
     }
