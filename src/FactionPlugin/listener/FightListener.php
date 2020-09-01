@@ -30,6 +30,7 @@ class FightListener implements Listener
              */
 
             if ($entity->getFaction() === $damager->getFaction()) {
+                $damager->sendPopup($lang["FACTION_NO_FIGHT"]);
                 return $event->setCancelled();
             }
 
@@ -37,37 +38,51 @@ class FightListener implements Listener
              * This function stop two player allies to fight.
              */
 
-            if (Core::getMethods()->areAllies($entity, $damager)) {
+            if ($damager->isAllyWith($entity)) {
 
                 $damager->sendPopup($lang["ALLIES_NO_FIGHT"]);
                 return $event->setCancelled();
 
             }
 
-            /*
-             * This part of the code give the statement for add power on death
-             */
-
-            if ($damager->hasFaction()) {
-                if ($entity->getHealth() === 0) {
-
-                    if($entity->hasFaction()) {
-                        $damager_faction = $damager->getFaction();
-                        Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"] );
-
-                        $entity_faction = $entity->getFaction();
-                        Core::getMethods()->setPower($entity_faction, -(Core::getConfigFile("configuration", "faction")["power"]) );
-
-                    } else {
-                        $damager_faction = $damager->getFaction();
-                        Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"] );
-                    }
-
-                }
-            }
-
         }
 
+    }
+
+    /*
+     * Here we add power and remove to factions :
+     */
+
+    public function onDeath(PlayerDeathEvent $event)
+    {
+
+        $cause = $event->getPlayer()->getLastDamageCause();
+
+        if($event instanceof EntityDamageByEntityEvent) {
+
+            $damager = $cause->getDamager();
+            $entity = $event->getPlayer();
+
+            if ($damager->hasFaction()) {
+
+                if($entity->hasFaction()) {
+
+                    $damager_faction = $damager->getFaction();
+                    Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"]);
+   
+                    Core::getMethods()->addPoints($damager_faction, 1);
+
+                    $entity_faction = $entity->getFaction();
+                    Core::getMethods()->setPower($entity_faction, -(Core::getConfigFile("configuration", "faction")["power"]));
+
+                } else {
+
+                    $damager_faction = $damager->getFaction();
+                    Core::getMethods()->setPower($damager_faction, Core::getConfigFile("configuration", "faction")["power"]);
+                }
+
+            }
+        }
     }
 
 }

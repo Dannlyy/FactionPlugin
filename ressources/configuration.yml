@@ -1,9 +1,13 @@
 faction:
 
-  max_members: 8
+  max_members: 15
   max_allies: 2
   power: 8
   default_level: 1
+
+guardian:
+
+  level: 5
 
 claims_features:
   

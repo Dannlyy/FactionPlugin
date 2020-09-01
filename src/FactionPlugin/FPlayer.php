@@ -9,10 +9,23 @@ use pocketmine\utils\Config;
 class FPlayer extends Player
 {
 
+    $faction = null
+    $factionRank = null;
+
 
     public function __construct(SourceInterface $interface, string $ip, int $port)
     {
         parent::__construct($interface, $ip, $port);
+    }
+
+    public function onConnect() {
+
+        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
+        $search = explode(" ", $file->get($this->getName()));
+
+        $this->faction = (isset($search[0]) === false ? null : $search[0]);
+        $this->factionRank = (isset($search[1]) === false ? null : $search[1]);
+
     }
 
     /*
@@ -21,12 +34,7 @@ class FPlayer extends Player
 
     public function getFaction()
     {
-
-        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
-
-        $search = explode(" ", $file->get($this->getName()));
-        return $search[0];
-
+        return $this->faction;
     }
 
     /*
@@ -35,12 +43,15 @@ class FPlayer extends Player
 
     public function getFactionRank()
     {
+        return $this->factionRank;
+    }
 
-        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
-
-        $search = explode(" ", $file->get($this->getName()));
-        return $search[1];
-
+    public function getFactionRankMessage()
+    {
+        if($this->getFactionRank() === "Leader") return "**";
+        if($this->getFactionRank() === "Officer") return "*";
+        
+        return "";
     }
 
     /*
@@ -49,8 +60,7 @@ class FPlayer extends Player
 
     public function hasFaction()
     {
-        $file = new Config(Core::getInstance()->getDataFolder() . "info/players_factions.json", Config::JSON);
-        if ($file->exists($this->getName())) {
+        if ($this->faction !== null) {
             return true;
         }
 
@@ -123,6 +133,15 @@ class FPlayer extends Player
 
     }
 
+    /*
+     * This function allow you to see if you're in alliance with the second player.
+     */
+
+    public function isAllyWith(FPlayer $player)
+    {
+        $faction = new FMethods();
+        return $faction->areAllies($this, $player);
+    }
 
 
     /*

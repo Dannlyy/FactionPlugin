@@ -15,54 +15,60 @@ class BaseLang {
 		return [
 
             "FACTION_HELP" =>
-                "§6--} Faction help" . Color::EOL .
-                "§6/f create [name] §r-> §6Create your own faction" . Color::EOL .
-                "§6/f delete §r-> §6Delete your own faction" . Color::EOL .
-                "§6/f info §r-> §6See a faction information" . Color::EOL .
-                "§6/f top §r-> §6Get the classement of Factions.",
+                "§9[§6Help§9] §fListe des commandes de faction :\n§7------" . Color::EOL .
+                "§9- §6/f create (name) §f-> §6Créer votre propre faction." . Color::EOL .
+                "§9- §6/f delete §f-> §6Supprimer votre propre faction." . Color::EOL .
+                "§9- §6/f info §f-> §6Voir les informations d'une faction ou de la votre." . Color::EOL .
+                "§9- §6/f desc §f-> §6Ajouter une description pour votre faction." . Color::EOL .
+                "§9- §6/f chat/allychat §f-> §6Activer ou désactiver le chat de faction ou alliés." . Color::EOL .
+                "§9- §6/f top (power/level) §f-> §6Voir le classement de Factions." . Color::EOL
+                "§7------",
 
             "FACTION_INFORMATIONS" =>
-                "§6--} Informations about [NAME] faction" . Color::EOL .
-                "§6Description : [DESCRIPTION]" . Color::EOL .
-                "§6Power : [POWER] §r| §6Balance : [BALANCE] §r| §6Kills : [KILLS]" . Color::EOL .
-                "§6Created at [DATE]" . Color::EOL .
-                "§6Leader : [LEADER]" . Color::EOL .
-                "Captains : [CAPTAINS]" . Color::EOL .
-                "Members : [MEMBERS]" . Color::EOL .
-                "Allies : [ALLIES]",
+                "§9[§6Faction§9] §fInformations à-propos la faction §6[NAME] §f:" . Color::EOL .
+                "§9- §fCréer le §6[DATE]" . Color::EOL .
+                "§9- §fDescription : §6[DESCRIPTION]" . Color::EOL .
+                "§7-----" . Color::EOL .
+                "§9- §fPower : §6[POWER]" Color::EOL .
+                "§9- §fLevel : §6[LEVEL] §r| §fPoints : §6[POINTS]" . Color::EOL .
+                "§9- §fKills : §6[KILLS]" . Color::EOL .
+                "§9- §fLeader : §6[LEADER]" . Color::EOL .
+                "§9- §fCaptains : §6[CAPTAINS]" . Color::EOL .
+                "§9- §fMembers : §6[MEMBERS]" . Color::EOL .
+                "§9- §fAllies : §6[ALLIES]",
 
-            "EXITED_FACTION_CHAT" => "§6--} §r§2Faction chat has been disabled !",
-            "ENTERED_FACTION_CHAT" => "§6--} §r§4Faction chat has been enabled !",
+            "EXITED_FACTION_CHAT" => "§9[§6Faction§9] §fVous avez désactivé §6le chat §fde faction avec succés !",
+            "ENTERED_FACTION_CHAT" => "§9[§6Faction§9] §fVous avez activé le chat de faction avec succés !",
             "FACTION_CHAT_PREFIX" => "§6[§rFaction§6] §6",
+            "FACTION_NO_FIGHT" => "§9- §6Vous êtes dans la même faction §9-",
 
-            "EXITED_ALLY_CHAT" => "§6--} §r§2Ally chat has been disabled !",
-            "ENTERED_ALLY_CHAT" => "§6--} §r§4Ally chat has been enabled !",
-            "ALLY_CHAT_PREFIX" => "§4[§rAlly§4] §4",
+            "EXITED_ALLY_CHAT" => "§9[§6Faction§9] §fVous avez désactivé §6le chat des ally §favec succés !",
+            "ENTERED_ALLY_CHAT" => "§9[§6Faction§9] §fVous avez activé §6le chat des ally §favec succés !",
+            "ALLIES_NO_FIGHT" => "§9- §6Vous êtes des allié ! §9-",
 
-            "EMPTY_DESC" => "§6--} §4Please write your description (55 characters maximum)",
-            "DESC_TOO_LONG" => "§6--} §4Your description is too long (55 characters maximum)",
-            "DESC_ADDED_SUCCESS" => "§6--} §4The description of the fac has been changed successfully",
-            "DESC_TIMER" => "§6--} §4You have 45 seconds to write the description.",
-            "DESC_TIMEOUT" => "§6--} §4Time out, use §6/f desc §4to write the description again.",
+            "EMPTY_DESC" => "§9[§6Faction§9] §fVeuillez entrer une description !",
+            "DESC_TOO_LONG" => "§9[§6Faction§9] §fLe nom que vous avez choisis est trop long (§655 characters maximum§f)",
+            "DESC_ADDED_SUCCESS" => "§9[§6Faction§9] §fVous avez mis une description pour votre faction avec succés !",
+            "DESC_TIMER" => "§9[§6Faction§9] §fVous avez §645 seconde(s) §fpour écrire votre description !",
+            "DESC_TIMEOUT" => "§9[§6Faction§9] §fLe temps est écoulé ! refaites §6/f desc §fpour écrire à nouveau votre description.",
 
-            "WRONG_FORMAT" => "§6--} §4Please enter the right format.",
-            "WRONG_LIST_TYPE" => "§6--} §4Please choose §6Kills §4or §6Balance §4to get the list.",
+            "WRONG_FORMAT" => "§9[§6Faction§9] §fVeuillez entrer la bonne format !",
+            "WRONG_LIST_TYPE" => "§9[§6FAction§9] §fEntrer §6/f top (power/level) §fpour voir le classement de faction !",
 
 
-            "CREATED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§2created",
-            "ALERT_CREATED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§2created§r§6 the faction §r§4[NAME]",
-            "NAME_TOO_LONG" => "§6--} §r§4The entered name is too long (more than 12 characters)",
+            "CREATED_SUCCESS" => "§9[§6Faction§9] §6[PLAYER] §fa crée la faction §6[NAME] §f!",
+            "NAME_TOO_LONG" => "§9[§6Faction§9] §fLe nom que vous avez choisis est trop long (§614 characters maximum§f)",
 
-            "DELETED_SUCCESS" => "§6--} Faction §r§4[NAME] §r§6has been §r§4deleted",
-            "ALERT_DELETED_SUCCESS" => "§6--} §r§4[PLAYER] §r§6have §r§4deleted§r§6 the faction §r§4[NAME]",
+            "DELETED_SUCCESS" => "§9[§6Faction§9] §fVous avez supprimé votre faction §6[NAME] §favec succés !",
+            "ALERT_DELETED_SUCCESS" => "§9[§6Faction§9] §6[PLAYER] §fa supprimé la faction §6[NAME] §f!",
 
-            "ERROR" => "§6--} §r§4An error occured, please try again",
-            "INVALID_PERM" => "§6--} §r§4You don't have the right permission for do that",
-            "INVALID_COMMAND" => "§6--} §r§4Invalid command",
-            "INVALID_FAC_NAME" => "§6--} §r§4Invalid faction name",
-            "ALREADY_IN_FAC" => "§6--} §r§4Please leave / delete your faction first",
-            "NO_FACTION" => "§6--} §r§4You are not in a faction !",
-            "ALREADY_EXIST" => "§6--} §r§4This faction already exist",
+            "ERROR" => "§9[§6Faction§9] §7Une erreur a eu lieu, réessaiez encore une fois !",
+            "INVALID_PERM" => "§9[§6Faction§9] §7Vous n'avez pas la permission d'exécuter cette commande !",
+            "INVALID_COMMAND" => "§9[§6Faction§9] §7Cette commande n'existe pas, faites §6/f help§7 pour avoir une liste de commandes.",
+            "INVALID_FAC_NAME" => "§9[§6Faction§9] §7Le nom que vous avez choisi n'existe pas, réessaiez un autre nom !",
+            "ALREADY_IN_FAC" => "§9[§6Faction§9] §7Veuillez quitter votre faction pour pouvoir exécuter cette commande !",
+            "NO_FACTION" => "§9[§6Faction§9] §7Créer une faction en faisant §6/f create (nom) §fpour pouvoir exécuter cette commande !",
+            "ALREADY_EXIST" => "§9[§6Faction§9] §7Cette faction existe déja !",
         ];
 	}
 

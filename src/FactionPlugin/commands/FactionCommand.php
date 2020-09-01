@@ -67,7 +67,7 @@ class FactionCommand extends PluginCommand
 
                     $name = $args[1];
 
-                    if (strlen($args[1]) > 12) {
+                    if (strlen($args[1]) > 14) {
                         $sender->sendMessage($lang["NAME_TOO_LONG"]);
                         return true;
                     }
@@ -89,17 +89,9 @@ class FactionCommand extends PluginCommand
 
                     $sender->sendMessage(
                         str_replace(
-                            "[NAME]",
-                            $name,
-                            $lang["CREATED_SUCCESS"]
-                        )
-                    );
-
-                    Server::getInstance()->broadcastMessage(
-                        str_replace(
                             ["[PLAYER]", "[NAME]"],
                             [$sender->getName(), $name],
-                            $lang["ALERT_CREATED_SUCCESS"]
+                            $lang["CREATED_SUCCESS"]
                         )
                     );
 
@@ -153,13 +145,17 @@ class FactionCommand extends PluginCommand
                     )
                 );
 
-                Server::getInstance()->broadcastMessage(
-                    str_replace(
-                        ["[PLAYER]", "[NAME]"],
-                        [$sender->getName(), $name],
-                        $lang["ALERT_DELETED_SUCCESS"]
-                    )
-                );
+                if($fmethods->getFactionLevel($name) >= 10) {
+
+                    Server::getInstance()->broadcastMessage(
+                        str_replace(
+                            ["[PLAYER]", "[NAME]"],
+                            [$sender->getName(), $name],
+                            $lang["ALERT_DELETED_SUCCESS"]
+                        )
+                    );        
+        
+                }
 
             }
 
@@ -188,7 +184,8 @@ class FactionCommand extends PluginCommand
                                 "[NAME]",
                                 "[DESCRIPTION]",
                                 "[POWER]",
-                                "[BALANCE]",
+                                "[LEVEL]",
+                                "[POINTS]",
                                 "[KILLS]",
                                 "[DATE]",
                                 "[LEADER]",
@@ -200,7 +197,8 @@ class FactionCommand extends PluginCommand
                                 $name,
                                 $fmethods->getSpecificInformation($name, "Description"),
                                 $fmethods->getSpecificInformation($name, "Power"),
-                                $fmethods->getSpecificInformation($name, "Balance"),
+                                $fmethods->getSpecificInformation($name, "Level"),
+                                $fmethods->getSpecificInformation($name, "Points"),
                                 $fmethods->getSpecificInformation($name, "Kills"),
                                 $fmethods->getSpecificInformation($name, "Date"),
                                 $fmethods->getSpecificInformation($name, "Leader"),
@@ -238,7 +236,8 @@ class FactionCommand extends PluginCommand
                                 "[NAME]",
                                 "[DESCRIPTION]",
                                 "[POWER]",
-                                "[BALANCE]",
+                                "[LEVEL]",
+                                "[POINTS]",
                                 "[KILLS]",
                                 "[DATE]",
                                 "[LEADER]",
@@ -250,7 +249,8 @@ class FactionCommand extends PluginCommand
                                 $name,
                                 $fmethods->getSpecificInformation($name, "Description"),
                                 $fmethods->getSpecificInformation($name, "Power"),
-                                $fmethods->getSpecificInformation($name, "Balance"),
+                                $fmethods->getSpecificInformation($name, "Level"),
+                                $fmethods->getSpecificInformation($name, "Points"),
                                 $fmethods->getSpecificInformation($name, "Kills"),
                                 $fmethods->getSpecificInformation($name, "Date"),
                                 $fmethods->getSpecificInformation($name, "Leader"),
@@ -351,7 +351,7 @@ class FactionCommand extends PluginCommand
              * This statement let us to set a description to your faction.
              */
 
-            if ($args[0] === "desc") {
+            if ($args[0] === "desc" or $args[0] === "description") {
 
                 /*
                  * See if the player has a faction.
@@ -371,16 +371,8 @@ class FactionCommand extends PluginCommand
                     return true;
                 }
 
-                /*
-                 * Check if the description is empty.
-                 */
 
                 if (empty($args[1])) {
-                    $sender->sendMessage($lang["EMPTY_DESC"]);
-                    return true;
-                }
-
-                if (!empty($args[1]) && ctype_alnum($args[1])) {
 
                     $sender->sendMessage($lang["DESC_TIMER"]);
                     $fmethods->desc[$sender->getName()] = time() + 45;
@@ -393,26 +385,26 @@ class FactionCommand extends PluginCommand
 
             }
 
-            if ($args[0] === "top") {
+            if ($args[0] === "top" or $args[0] === "topfactions" or $args[0] === "topfaction") {
                 /*
                  * When there is no type defined we send the kills
                  */
 
                 if (empty($args[1])) {
-                    $fmethods->getTopFactions($sender, "Kills");
+                    $fmethods->getTopFactions($sender, "level");
                     return true;
                 }
 
                 if (!empty($args[1])) {
 
-                    if ($args[1] === "Balance") {
+                    if ($args[1] === "power") {
 
-                        $fmethods->getTopFactions($sender, "Balance");
+                        $fmethods->getTopFactions($sender, "power");
                         return true;
 
-                    } elseif ($args[1] === "Kills") {
+                    } elseif ($args[1] === "level") {
 
-                        $fmethods->getTopFactions($sender, "Kills");
+                        $fmethods->getTopFactions($sender, "level");
                         return true;
 
                     } else {
